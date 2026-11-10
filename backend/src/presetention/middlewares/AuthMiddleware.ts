@@ -31,7 +31,7 @@ export function authMiddleware(
         
         req.user = payload as {
             id: string
-            role: string
+            role: string[]
         }
 
         next()

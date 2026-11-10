@@ -8,7 +8,7 @@ import { User } from "lucide-react";
 import { SearchBar } from "./components/ui/searchBar";
 
 function App() {
-  const { data: user, isPending } = useAuthUser()
+  const { data: user } = useAuthUser()
   const navigate = useNavigate()
   const { isToken } = isAuthenticated()
 
@@ -21,9 +21,6 @@ function App() {
     navigate("/login");
   }
 
-  if (isPending || !user) {
-    return <p>Carregando...</p>;
-  }
 
   return (
     <>

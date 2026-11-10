@@ -35,6 +35,16 @@ export class categoryRepository
         return toEntity(createdCategory)
     }
 
+    async createMany(categories: Category[]): Promise<Category[]> {
+        const addedMany = await CategoryModel.insertMany(
+            categories.map(category => ({
+                category: category.category
+            }))
+        )
+
+        return addedMany.map(toEntity)
+    }
+
     async updateCategory(id: string, type: string): Promise<Category> {
         const updatedCategory = await CategoryModel.findByIdAndUpdate(id, { type }, { new: true })
 

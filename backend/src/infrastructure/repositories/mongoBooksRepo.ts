@@ -5,13 +5,17 @@ import { AuthorModel } from "../database/models/authorsModel.js";
 import { BookModel, type BookDocument } from "../database/models/bookModel.js";
 import { CategoryModel } from "../database/models/catergoryModel.js";
 
-function toEntity(mongoDoc: BookDocument) {
+function toEntity(mongoDoc: any) {
     return new BookEntity(
         mongoDoc.title,
         mongoDoc.pages,
-        mongoDoc.author.toString(),
-        mongoDoc.categories.map(category => category.toString())
-    )
+        mongoDoc.author?.name ?? mongoDoc.author.toString(),
+        mongoDoc.categories?.map(
+            (category: any) => category.category ?? category.toString()
+        ) ?? [],
+        mongoDoc.cover_image ?? undefined,
+        mongoDoc._id.toString()
+    );
 }
 
 export class BookRepository
@@ -91,6 +95,48 @@ export class BookRepository
         })
 
         return toEntity(createdBook)
+    }
+
+    async createMany(books: BookEntity[]): Promise<BookEntity[]> {
+        const booksToInsert = await Promise.all(
+            books.map(async (book) => {
+                const author = await AuthorModel.findOne({
+                    name: book.author
+                });
+
+                if (!author) {
+                    throw new Error(`Author not found: ${book.author}`);
+                }
+
+                const categories = await CategoryModel.find({
+                    category: { $in: book.categories }
+                });
+
+                if (categories.length !== book.categories.length) {
+                    throw new Error(`One or more categories were not found`);
+                }
+
+                return {
+                    title: book.title,
+                    pages: book.pages,
+                    author: author._id,
+                    categories: categories.map((category) => category._id),
+                    ...(book.cover_image
+                        ? { cover_image: book.cover_image }
+                        : {})
+                };
+            })
+        );
+
+        const createdBooks = await BookModel.insertMany(booksToInsert);
+
+        const populatedBooks = await BookModel.find({
+            _id: { $in: createdBooks.map((book) => book._id) }
+        })
+            .populate("authors", "author")
+            .populate("categories", "category");
+
+        return populatedBooks.map((mongoDoc) => toEntity(mongoDoc));
     }
 
     async updateBook(id: string, Book: BookEntity): Promise<BookEntity | null> {

@@ -15,7 +15,7 @@ router.get(
 )
 
 router.get(
-    "/author",
+    "/list",
     BookController.findAuthor.bind(BookController)
 )
 

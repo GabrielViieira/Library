@@ -43,6 +43,10 @@ export class AuthorRepository
         return toEntity(createdAuthor)
     }
 
+    async createMany(data: Authors[]) {
+        return await AuthorModel.insertMany(data);
+    }
+
     async updateAuthor(id: string, author: Authors): Promise<Authors | null> {
         const updatedAuthor = await AuthorModel.findByIdAndUpdate(id, author, { new: true })
 

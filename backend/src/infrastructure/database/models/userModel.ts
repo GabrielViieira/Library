@@ -19,7 +19,7 @@ const userSchema = new Schema(
     },
     birth: {
       type: Date,
-      required: true
+      default: "0/0/01"
     },
     role: {
       type: [String],

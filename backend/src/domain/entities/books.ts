@@ -5,6 +5,6 @@ export class Book{
         public author: string,
         public categories: string[],
         public id?: string,
-        public image?: string
+        public cover_image?: string,
     ){}
 } 

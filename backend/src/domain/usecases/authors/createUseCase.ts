@@ -6,7 +6,12 @@ export class createAuthorsUseCase{
         private readonly repository: IAuthors
     ){}
 
-    async execute(author: Authors): Promise<Authors>{
-        return this.repository.createAuthor(author)
+    async execute(author: Authors | Authors []): Promise<Authors>{
+        if (Array.isArray(author)) {
+        return await this.repository.createMany(author);
+    }
+
+    return await this.repository.createAuthor(author);
     }
 }
+

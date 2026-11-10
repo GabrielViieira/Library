@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
 
 export async function connectDB() {
+    console.log('URL:', process.env.MONGODB_URL)
+
    await mongoose.connect(process.env.MONGODB_URL!)
-      .then(() => console.log("Conectado ao MongoDB"))
-      .catch((err) => console.error(err))
+
+   console.log('Banco conectado:', mongoose.connection.name)
 }

@@ -63,11 +63,11 @@ export class BooksController {
     }
 
     async createBook(req: Request, res: Response) {
-        const book = req.body
+        const book = req.body;
 
-        const createdBook = await this.createBooksUseCase.execute(book)
+        const createdBook = await this.createBooksUseCase.execute(book);
 
-        return res.status(201).json(createdBook)
+        res.status(201).json(createdBook);
     }
 
     async updateBook(req: Request, res: Response) {

@@ -40,11 +40,11 @@ export class AuthorsController {
     }
 
     async createAuthor(req: Request, res: Response) {
-        const author = req.body
+        const authors = req.body;
 
-        const createdAuthor = await this.createAuthorsUseCase.execute(author)
+        const createdAuthors = await this.createAuthorsUseCase.execute(authors);
 
-        res.status(201).json(createdAuthor)
+        return res.status(201).json(createdAuthors);
     }
 
     async updateAuthor(req: Request, res: Response) {

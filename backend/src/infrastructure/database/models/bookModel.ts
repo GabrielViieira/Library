@@ -23,7 +23,10 @@ const bookSchema = new Schema({
     categories: [{
         type: Schema.Types.ObjectId,
         ref: "categories"
-    }]
+    }],
+    cover_image: {
+        type: String
+    }
 });
 
 export type BookDocument =

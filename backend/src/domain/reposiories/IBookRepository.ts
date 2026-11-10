@@ -6,6 +6,7 @@ export interface IBook{
     findAuthor(name: string): Promise<Book[] | null>
     findCategory(name: string): Promise<Book[] | null>
     createBook(Book: Book): Promise<Book>
+    createMany(Books: Book[]):Promise<Book[]>
     updateBook(id: string, Book: Book): Promise<Book | null>
     deleteBook(id: string): Promise<boolean>
 }
